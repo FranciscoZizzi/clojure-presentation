@@ -33,7 +33,8 @@
   .font-inter     { font-family: "Inter", sans-serif; }
   body {
     @apply font-serif antialiased text-gray-900 sm:overscroll-y-none pb-8;
-  }
+    overflow: hidden;
+}
   code, .code {
     @apply font-mono text-sm text-gray-900 bg-slate-50 px-0.5 py-px rounded dark:bg-gray-800;
   }
@@ -425,6 +426,7 @@ figcaption .markdown-viewer a {
 }
 .devdocs-body {
   @apply font-inter;
+  overflow: hidden;
 }
 
 /* Workarounds */
