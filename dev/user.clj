@@ -18,10 +18,17 @@
                                          (str "body {" inner-content "  overflow: hidden;\n}"))))]
     (spit file-path updated-content)))
 
+;; Makes the code viewer box an appropriate width
+(defn remove-max-code-viewer-width [file-path]
+  (let [html-content (slurp file-path)
+        updated-content (str/replace html-content ".max-w-wide  { @apply max-w-3xl !important; }" "")]
+    (spit file-path updated-content)))
+
 (defn -main []
   (do
     (clerk/build! {:paths ["notebooks/slideshow.clj"]}))
     (add-css-property "public/build/index.html")
+    (remove-max-code-viewer-width "public/build/index.html")
     )
 
 (defn dev []
