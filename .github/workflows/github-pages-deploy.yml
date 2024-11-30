@@ -1,6 +1,9 @@
 name: Example workflow
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   deploy:
@@ -25,13 +28,6 @@ jobs:
 
       - name: Build static site
         run: clojure -Sdeps '{:paths ["src" "dev"]}' -M -m user
-
-      - name: Setup GitHub Pages
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          git remote set-url origin https://FranciscoZizzi:${GH_TOKEN}@github.com/FranciscoZizzi/clojure-presentation.git
-          git push origin gh-pages
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
