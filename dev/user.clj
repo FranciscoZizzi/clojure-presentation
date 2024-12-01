@@ -11,10 +11,8 @@
         updated-content (str/replace html-content
                                      #"body \{([^\}]+)\}"
                                      (fn [[full-match inner-content]]
-                                       ;; Check if "overflow: hidden;" exists in the inner content
                                        (if (str/includes? inner-content "overflow: hidden;")
                                          full-match
-                                         ;; Add "overflow: hidden;" before closing "}"
                                          (str "body {" inner-content "  overflow: hidden;\n}"))))]
     (spit file-path updated-content)))
 
@@ -32,15 +30,5 @@
     )
 
 (defn dev []
-  ;; start Clerk's built-in webserver on the default port 7776, opening the browser when done
-  (clerk/serve! {:browse true})
-
-  ;; either call `clerk/show!` explicitly
   (clerk/show! "notebooks/slideshow.clj")
-
-  ;; or let Clerk watch the given `:paths` for changes
-  (clerk/serve! {:watch-paths ["notebooks" "src"]})
-
-  ;; start with watcher and show filter function to enable notebook pinning
-  (clerk/serve! {:watch-paths ["notebooks" "src"] :show-filter-fn #(clojure.string/starts-with? % "notebooks")})
   )
