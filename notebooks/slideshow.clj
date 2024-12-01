@@ -87,8 +87,9 @@
 
 ;; ---
 ;; # Control Flow
-;; #### if
-;; (if boolean-form then-form optional-else-from)
+;; (if boolean-form
+;; 		then-form
+;; 		optional-else-from)
 (if 4
 	"True!"
 	"False :(")
@@ -103,3 +104,67 @@
 	(println "Something")
 	(println "Something else")
 	[1 2 3])
+
+;; ---
+;; # def and defn
+;; _def_ is used to assign a name to a value
+(def my-clojure-vector [1 2 3 4])
+(str "This is MY vector -> " my-clojure-vector) ; str concatenates strings, also turns values into strings automatically
+;; Functions are values, of course
+(def plus +)
+(plus 1 2)
+;; _defn_ is used to declare functions
+{::clerk/visibility {:result :hide}}
+(defn my-clojure-function "Optional docstring" [arg1 arg2]
+	(str arg1 arg2))
+{::clerk/visibility {:result :show}}
+(my-clojure-function "Hello " "world!")
+
+;; ---
+;; # Functions
+;; It is possible to define functions with an undefined amount of arguments
+{::clerk/visibility {:result :hide}}
+(defn average [& args]
+	(/ (apply + args) (count args)))
+
+{::clerk/visibility {:result :show}}
+(average 0 0 1)
+;; We can also define different behaviours depending on the _arity_ (number of arguments received)
+{::clerk/visibility {:result :hide}}
+(defn multi-arity
+	([arg1 arg2 arg3] "Three")
+	([arg1 arg2] "Two")
+	([arg1] "One")
+	)
+{::clerk/visibility {:result :show}}
+[(multi-arity 1) (multi-arity 1 2) (multi-arity 1 2 3)]
+
+;; ---
+;; # Destructuring
+;; We can use destructuring to easily access values in data structures
+{::clerk/visibility {:result :hide}}
+(defn some-function [ [first second third & the-rest] ]
+	(str "First: " first "\nSecond: " second "\nThird: " third "\nThe rest: " the-rest))
+{::clerk/visibility {:result :show}}
+(some-function [1 2 3 2 5 12 3])
+{::clerk/visibility {:result :hide}}
+;; Destructuring a map:
+(defn some-function [{name :name surname :surname}]
+	(str "Hello, " name " " surname))
+(defn some-other-function [{name :name surname :surname :as person}]; We can use the :as keyword to get the map too
+	(str name " " surname " lives in " (:city person)))
+{::clerk/visibility {:result :show}}
+(some-function {:name "John" :surname "Doe"})
+(some-other-function {:name "John" :surname "Doe" :city "Venice"})
+
+;; ---
+;; # Polymorphism
+;; TODO
+
+;; ---
+;; # Let
+;; TODO
+
+;; ---
+;; # The REPL
+;; TODO
