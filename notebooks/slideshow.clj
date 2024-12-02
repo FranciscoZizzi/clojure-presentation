@@ -3,6 +3,8 @@
 	(:require [nextjournal.clerk :as clerk]
 			  [nextjournal.clerk-slideshow :as slideshow])
 	)
+{::clerk/visibility {:code :hide :result :hide}}
+(clerk/add-viewers! [slideshow/viewer])
 
 {::clerk/visibility {:code :hide :result :show}}
 (clerk/html [:div.flex.items-center.overflow-hidden.gap-4
