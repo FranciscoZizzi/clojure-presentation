@@ -30,35 +30,27 @@
 
 ;; ---
 ;; # Syntax
-;; ### The syntax consists of:
-;; #### Symbols
-;; - . + - * / : etc.
-;; #### Literals, mainly:
+;; The syntax consists of:
+;; #### Numeric types
 {::clerk/visibility {:code :show :result :hide}}
-{
- :string          "Hello World!"
- :integer         985
- :floating-point  3.14
- :ratio           15/4
- 	; Used to reduce floating point error
- :bool            [true, false]
- :keyword         :my-keyword
- 	; Could be thought of as enums
- 	; Useful as keys for maps
- :nil             nil
- 	; Represents the Java null
- }
-;; #### Data Structures
-{
- :list            '(1 2 "Three")
- 	; Accessed sequentially
- :vector          [1 :two "Three"]
- 	; Random access
- :map             {:key1 "val1" :key2 2}
- :set             #{:one 2 "Three" 4.5}
- }
-;; Notice how no commas are needed
-
+985 			; Integer
+3.14			; Floating Point
+1/3				; Ratio
+;; #### Character types
+"Hello World!"	; String
+\e				; Character
+[#"[0-9]+"] 	; Regular expression (without the [])
+;; #### Symbols and idents
+map				; Symbol
+nil 			; Null value
+[true false] 	; Booleans
+:hello			; Keyword
+:some/thing		; Keyword with namespace
+;; #### Literal collections
+'(1 2 "Three")			; List
+[1 :two "Three"]		; Vector
+{:key1 "val1" :key2 2}	; Map
+#{:one 2 "Three" 4.5}	; Set
 ;; ---
 ;; # Evaluation
 ;; Literals evaluate themselves:
@@ -197,11 +189,64 @@
 
 ;; ---
 ;; # Polymorphism
-;; TODO
+;; Clojure supports runtime polymorphism with **multimethods**\
+;; Multimethods are defined using defmulti, which takes qhte name of the multimethod and the dispatch function.
+{::clerk/visibility {:result :hide}}
+(defmulti encounter (fn [x y] [(:Species x) (:Species y)])) ; the dispatch function returns the species of x and y
+;; Each method is then implemented using defmethod, passing the name, dispatch value and function body.
+(defmethod encounter [:Bunny :Lion] [b l] :run-away)
+(defmethod encounter [:Lion :Bunny] [l b] :eat)
+(defmethod encounter [:Lion :Lion] [l1 l2] :fight)
+(defmethod encounter [:Bunny :Bunny] [b1 b2] :mate)
+(def b1 {:Species :Bunny :other :stuff})
+(def b2 {:Species :Bunny :other :stuff})
+(def l1 {:Species :Lion :other :stuff})
+(def l2 {:Species :Lion :other :stuff})
+{::clerk/visibility {:result :show}}
+[ (encounter b1 b2)
+(encounter b1 l1)
+(encounter l1 b1)
+(encounter l1 l2) ]
+;; This would be equivalent to
+{::clerk/visibility {:result :hide}}
+(defn encounter [x y]
+	(cond
+		(and (= :Bunny (:Species x)) (= :Lion (:Species y)))
+		:run-away
+		(and (= :Lion (:Species x)) (= :Bunny (:Species y)))
+		:eat
+		(and (= :Lion (:Species x)) (= :Lion (:Species y)))
+		:fight
+		(and (= :Bunny (:Species x)) (= :Bunny (:Species y)))
+		:mate
+		)
+	)
 
 ;; ---
 ;; # Macros
-;; TODO
+;; We saw that clojure is homoiconic, so expressions are written things in terms of lists.
+;; This means we are able to manupulate those lists, after all, they are just another data structure.\
+;; I could make a function that reverses the expression given, like so:
+{::clerk/visibility {:result :hide}}
+(defn reverse-form-1 [form]
+	(reverse form)
+	)
+{::clerk/visibility {:result :show}}
+(reverse-form-1 '(1 2 3 str))
+;; And then evaluate it:
+(eval (reverse-form-1 '(1 2 3 str)))
+;; Problem: We need to provide the form using a single quote (') and use _eval_ to evaluate it.\
+;; Solution: We use a macro.
+{::clerk/visibility {:result :hide}}
+(defmacro reverse-form [form]
+	(reverse form))
+{::clerk/visibility {:result :show}}
+(reverse-form (1 2 3 str))
+;; Macros allow us to extend the language itself by writing code that generates other code at compile time.\
+;; We can use _macroexpand_ to see how the code would look like when expanded by the compiler.
+(macroexpand '(when true "Hello"))
+;; We can see that _when_ is actually just a macro, that joins if and do.
+
 
 ;; ---
 ;; # The REPL
