@@ -36,9 +36,13 @@
 ;; # The REPL
 ;; The REPL (Read-Eval Print Loop) is a programming environment which enables the programmer to interact with a running
 ;; Clojure program and modify it, evaluating one code expression at a time.\
+;; \
 ;; This enables a quick feedback loop not available in most other languages.\
+;; \
 ;; We can think of the REPL as something similar to SSH, in the same way you can interact with a remote server, we can use the REPL to
 ;; interact with a running Clojure process.
+{::clerk/visibility {:code :hide :result :show}}
+(clerk/html [:img {:src "https://clojure.org/images/content/guides/repl/show-terminal-repl.gif"}])
 
 ;; ---
 ;; # Syntax
