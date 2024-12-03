@@ -241,7 +241,10 @@ nil 			; Null value
 (defmacro reverse-form [form]
 	(reverse form))
 {::clerk/visibility {:result :show}}
-(reverse-form (1 2 3 str))
+;; ```
+;; (reverse-form (1 2 3 str))
+;; => "321"
+;; ```
 ;; Macros allow us to extend the language itself by writing code that generates other code at compile time.\
 ;; We can use _macroexpand_ to see how the code would look like when expanded by the compiler.
 (macroexpand '(when true "Hello"))
