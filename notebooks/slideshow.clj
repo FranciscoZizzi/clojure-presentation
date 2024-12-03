@@ -20,13 +20,25 @@
 ;; ---
 
 ;; # Main Features
-;; - Functional
-;; - Dynamic
-;; - Homoiconic
-;; - Immutability
-;; - Great with concurrency and data processing/manipulation
-;; - Live programming
-;; - Runs on the JVM and can be compiled to Javascript
+;; * Functional
+;; * Dynamic
+;; * Homoiconic
+;;     - Clojure programs are represented by Clojure data structures.
+;; * Immutability
+;; * Great with concurrency and data processing/manipulation
+;; * Live programming through the REPL
+;; * Runs on the JVM
+;;     - Compiles to a .jar file, so anyone with Java installed can run it.
+;; * Can compile to Javascript
+;;     - Makes frontend development with Clojure easier through React wrappers, for example.
+
+;; ---
+;; # The REPL
+;; The REPL (Read-Eval Print Loop) is a programming environment which enables the programmer to interact with a running
+;; Clojure program and modify it, evaluating one code expression at a time.\
+;; This enables a quick feedback loop not available in most other languages.\
+;; We can think of the REPL as something similar to SSH, in the same way you can interact with a remote server, we can use the REPL to
+;; interact with a running Clojure process.
 
 ;; ---
 ;; # Syntax
@@ -51,6 +63,22 @@ nil 			; Null value
 [1 :two "Three"]		; Vector
 {:key1 "val1" :key2 2}	; Map
 #{:one 2 "Three" 4.5}	; Set
+
+;; ---
+;; # Evaluation
+;; Clojure reads and evaluates expressions differently.\
+;; In java source code is read as characters by the compiler, which produces bytecode which can be loaded by the JVM:
+{::clerk/visibility {:code :hide :result :show}}
+(clerk/html [:img {:src "https://www.clojure.org/images/content/guides/learn/syntax/traditional-evaluation.png"}])
+;; In Clojure, source code is read as characters by the Reader (This separation between the reader and compiler is what
+;; makes room for macros, which we'll see later). The reader can read from a .clj file or from
+;; Expressions received interactively through the REPL. The reader produces Clojure data that the compiler then uses
+;; to produce the bytecode for the JVM:
+(clerk/html [:img {:src "https://www.clojure.org/images/content/guides/learn/syntax/clojure-evaluation.png"}])
+;; A key difference is the compilation unit: In Java it is a class or .java file, while in Clojure it is an expression.
+;; Files in Clojure are read as series of expressions, you could type each expression from a file into the REPL and you
+;; would get the same result.
+
 ;; ---
 ;; # Evaluation
 ;; Literals evaluate themselves:
@@ -76,12 +104,12 @@ nil 			; Null value
 ;; Returns the first false value or the last value if no false values are found
 (and 1 2 3 4 nil 5)
 (and 1 2 3 4)
-;; nil and false are both false values, everything else is considered true
+;; nil and false are considered false values, everything else is considered true
 
 ;; ---
 ;; # Control Flow
-;; (if boolean-form
-;; 		then-form
+;; (if boolean-form\
+;; 		then-form\
 ;; 		optional-else-from)
 (if 4
 	"True!"
@@ -92,7 +120,7 @@ nil 			; Null value
 ;; Use the _do_ operator to do multiple things in an if form
 (if true
 	(do (println "Hey") "Hey"))
-;; _when_ does the same thing, but it does not accept an else form
+;; _when_ does the same thing as if and do, but does not accept an else form
 (when true
 	(println "Something")
 	(println "Something else")
@@ -226,7 +254,7 @@ nil 			; Null value
 ;; # Macros
 ;; We saw that clojure is homoiconic, so expressions are written things in terms of lists.
 ;; This means we are able to manupulate those lists, after all, they are just another data structure.\
-;; I could make a function that reverses the expression given, like so:
+;; So I could make a function that reverses the expression given, like so:
 {::clerk/visibility {:result :hide}}
 (defn reverse-form-1 [form]
 	(reverse form)
@@ -250,7 +278,3 @@ nil 			; Null value
 (macroexpand '(when true "Hello"))
 ;; We can see that _when_ is actually just a macro, that joins if and do.
 
-
-;; ---
-;; # The REPL
-;; TODO
