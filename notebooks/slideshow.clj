@@ -26,11 +26,24 @@
 ;;     - Clojure programs are represented by Clojure data structures.
 ;; * Immutability
 ;; * Great with concurrency and data processing/manipulation
+;; * Very simple syntax
 ;; * Live programming through the REPL
 ;; * Runs on the JVM
 ;;     - Compiles to a .jar file, so anyone with Java installed can run it.
 ;; * Can compile to Javascript
 ;;     - Makes frontend development with Clojure easier through React wrappers, for example.
+
+;; ---
+;; # Who uses Clojure?
+;; ### Walmart
+;; - Used Clojure to create a robust data management system that supports over 5,000 stores and integrates online and mobile data.
+;; ### Atlassian
+;; - Is using Clojure to build realtime collaboration features into both new and existing products.
+;; ### Nubank
+;; - Has around 1000 microservices written in Clojure.
+;; ### Me
+;; - Used it to create this slideshow :-)
+
 
 ;; ---
 ;; # The REPL
@@ -96,6 +109,67 @@ nil 			; Null value
 '(+ 1 2 3)
 
 ;; ---
+;; # Lists
+;; Create a list:
+{::clerk/visibility {:result :hide}}
+'(1 2 3 4 5)
+(list 1 2 3 4 5)
+{::clerk/visibility {:result :show}}
+;; Get nth element of a list:
+(nth (list 1 2 3 4 5) 3)
+;; Get size of a list:
+(count (list 1 2 3 4 5))
+;; Add element to the **start** of a list
+(conj (list "One" "Two" "Three" ) 0)
+;; Lists are accessed sequentially, that's why _conj_ adds an element to the start
+
+;; ---
+;; # Vectors
+;; Create a vector:
+{::clerk/visibility {:result :hide}}
+[1 2 3 4 5]
+(vector 1 2 3 4 5)
+;; Get nth element of a vector:
+{::clerk/visibility {:result :show}}
+(get [1 2 3 4] 2)
+;; Get size of a vector:
+(count [1 2 3 4 5])
+;; Add element to the **end** of a vector
+(conj [1 2 3 4] "Five")
+;; Vectors are accessed randomly, so adding something to the end has a complexity of O(1), same about getting the nth element of one.
+
+;; ---
+;; # Hash Sets
+;; Create a set:
+{::clerk/visibility {:result :hide}}
+#{1 2 "Three" nil :five}
+;; Check if a set contains a value;
+{::clerk/visibility {:result :show}}
+[(contains? #{1 2 3} 3) (contains? #{1 2 3} 4)]
+;; Add an element to the set:
+(conj #{1 2 3 4} 5)
+;; Sets are collections of unique values so you can't add something twice
+(conj #{1 2 3 4} 2)
+;; Get an element from a set:
+(get #{#{3 2 1} #{:one :two}} #{1 3 2})
+
+;; ---
+;; # Maps
+;; Create a map:
+{::clerk/visibility {:result :hide}}
+{:key1 1
+ :key2 "Two"
+ 1 2
+ }
+;; Get element from a map
+{::clerk/visibility {:result :show}}
+(:key1 {:key1 1 :key2 "Two" 1 2}) ; If we are using a key
+(get {:key1 1 :key2 "Two" 1 2} 1) ; If we are not using a key
+;; Get element with default value
+(:key3 {:key1 1 :key2 "Two" 1 2} "Value not found") ; If we are using a key
+(get {:key1 1 :key2 "Two" 1 2} 2 "Value not found") ; If we are not using a key
+
+;; ---
 ;; # Boolean Expressions
 ;; #### Equality
 (= #{1 2 3} #{3 2 1})
@@ -143,6 +217,22 @@ nil 			; Null value
 	[a b c])
 
 ;; ---
+;; # Immutability
+;; In Clojure, data structures are immutable
+{::clerk/visibility {:result :hide}}
+(def my-list (list 1 2 3 4))
+{::clerk/visibility {:result :show}}
+(conj my-list 3)
+my-list
+;; Any function that "changes" the data structure returns a new instance of it.\
+;; We could get around this by redefining _my-list_:
+{::clerk/visibility {:result :hide}}
+(def my-list (list 1 2 3 4))
+(def my-list (conj my-list 2))
+{::clerk/visibility {:result :show}}
+my-list
+
+;; ---
 ;; # Functions
 ;; We can create a function with _defn_
 {::clerk/visibility {:result :hide}}
@@ -187,10 +277,13 @@ nil 			; Null value
 	(filter
 	 (fn [band] (= :rock (:genre band)))
 	 bands))
-;; Or we can use #. % represents an argument, in this case a band
+;; Or we can use the # notation. % represents an argument, in this case a band
 (def rock-bands (filter #(= :rock (:genre %)) bands))
-;; It supports multiple arguments:
+;; It also supports multiple arguments:
 (#(str %1 %2 %3) 1 2 3)
+
+;; ---
+;; # Higher Order Functions
 ;; ### Functions returning functions and functions as values
 ;; Adder returns a function which we use to define add-five
 {::clerk/visibility {:result :hide}}
@@ -282,3 +375,5 @@ nil 			; Null value
 (macroexpand '(when true "Hello"))
 ;; We can see that _when_ is actually just a macro, that joins if and do.
 
+;; ---
+;; # Thank You!
