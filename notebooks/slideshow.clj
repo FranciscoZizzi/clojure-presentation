@@ -62,24 +62,32 @@
 ;; The syntax consists of:
 ;; #### Numeric types
 {::clerk/visibility {:code :show :result :hide}}
-985 			; Integer
-3.14			; Floating Point
-1/3				; Ratio
+#{
+	985 			; Integer
+	3.14			; Floating Point
+	1/3				; Ratio
+}
 ;; #### Character types
-"Hello World!"	; String
-\e				; Character
-[#"[0-9]+"] 	; Regular expression (without the [])
+#{
+	"Hello World!"	; String
+	\e				; Character
+	#"[0-9]+" 		; Regular expression
+}
 ;; #### Symbols and idents
-map				; Symbol
-nil 			; Null value
-[true false] 	; Booleans
-:hello			; Keyword
-:some/thing		; Keyword with namespace
+#{
+	map				; Symbol
+	nil 			; Null value
+	[true false] 	; Booleans
+	:hello			; Keyword
+	:some/thing		; Keyword with namespace
+}
 ;; #### Literal collections
-'(1 2 "Three")			; List
-[1 :two "Three"]		; Vector
-{:key1 "val1" :key2 2}	; Map
-#{:one 2 "Three" 4.5}	; Set
+#{
+	'(1 2 "Three")			; List
+	[1 :two "Three"]		; Vector
+	{:key1 "val1" :key2 2}	; Map
+	#{:one 2 "Three" 4.5}	; Set
+}
 
 ;; ---
 ;; # Evaluation
@@ -101,10 +109,10 @@ nil 			; Null value
 ;; Literals evaluate themselves:
 {::clerk/visibility {:code :show :result :show}}
 "Hello!"
-;; Clojure is **homoiconic**, which basically means that it's written with its own data structures.
-
-;; Non-empty lists are considered _calls_. The first element is evaluated as a function call:
+;; To call a function we use the form: (function-name arg1 arg2 arg3 ...)
 (+ 1 2 3)
+;; Notice how the above expression is a list, that's why Clojure is considered homoiconic.\
+;; Non-empty lists are considered _calls_. The first element is evaluated as a function call.\
 ;; If you don't want to evaluate the contents of a list, use ':
 '(+ 1 2 3)
 
@@ -285,7 +293,7 @@ my-list
 ;; ---
 ;; # Higher Order Functions
 ;; ### Functions returning functions and functions as values
-;; Adder returns a function which we use to define add-five
+;; In this example, adder returns a function which we use to define add-five
 {::clerk/visibility {:result :hide}}
 (defn adder [x]
 	(fn [a] (+ x a)))
@@ -298,7 +306,7 @@ my-list
 ;; # Destructuring
 ;; We can use destructuring to easily access values in data structures
 {::clerk/visibility {:result :hide}}
-(defn some-function [ [first second third & the-rest] ]
+(defn some-function [ [first second third & the-rest] ] ; Notice the two pairs of square brackets, the function is receiving a vector as argument.
 	(str "First: " first "\nSecond: " second "\nThird: " third "\nThe rest: " the-rest))
 {::clerk/visibility {:result :show}}
 (some-function [1 2 3 2 5 12 3])
