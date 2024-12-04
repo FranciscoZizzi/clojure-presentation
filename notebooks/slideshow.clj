@@ -375,7 +375,9 @@ my-list
 (defmacro infix [[operand1 operator operand2]]
 	(list operator operand1 operand2))
 {::clerk/visibility {:result :show}}
-(infix (4 + 2))
+;; ```
+;; (infix (4 + 2))
+;; ```
 ;; Macros allow us to extend the language itself by writing code that generates other code at compile time.\
 ;; We can use _macroexpand_ to see how the code would look like when expanded by the compiler.
 (macroexpand '(when true "Hello"))
