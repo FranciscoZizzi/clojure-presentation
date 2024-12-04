@@ -20,6 +20,7 @@
 ;; ---
 
 ;; # Main Features
+;; * Lisp dialect
 ;; * Functional
 ;; * Dynamic
 ;; * Homoiconic
@@ -359,25 +360,22 @@ my-list
 ;; # Macros
 ;; We saw that clojure is homoiconic, so expressions are written things in terms of lists.
 ;; This means we are able to manupulate those lists, after all, they are just another data structure.\
-;; So I could make a function that reverses the expression given, like so:
+;; So I could make a function that receives an operation in infix notation and turns it into the correct form:
 {::clerk/visibility {:result :hide}}
-(defn reverse-form-1 [form]
-	(reverse form)
+(defn infix-1 [[operand1 operator operand2]]
+	(list operator operand1 operand2)
 	)
 {::clerk/visibility {:result :show}}
-(reverse-form-1 '(1 2 3 str))
+(infix-1 '(2 + 4))
 ;; And then evaluate it:
-(eval (reverse-form-1 '(1 2 3 str)))
+(eval (infix-1 '(2 + 4)))
 ;; Problem: We need to provide the form using a single quote (') and use _eval_ to evaluate it.\
 ;; Solution: We use a macro.
 {::clerk/visibility {:result :hide}}
-(defmacro reverse-form [form]
-	(reverse form))
+(defmacro infix [[operand1 operator operand2]]
+	(list operator operand1 operand2))
 {::clerk/visibility {:result :show}}
-;; ```
-;; (reverse-form (1 2 3 str))
-;; => "321"
-;; ```
+(infix (4 + 2))
 ;; Macros allow us to extend the language itself by writing code that generates other code at compile time.\
 ;; We can use _macroexpand_ to see how the code would look like when expanded by the compiler.
 (macroexpand '(when true "Hello"))
