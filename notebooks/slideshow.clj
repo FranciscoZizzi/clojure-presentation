@@ -20,76 +20,87 @@
 ;; ---
 
 ;; # Main Features
-;; * Lisp dialect
-;; * Functional
-;; * Dynamic
-;; * Homoiconic
+;; * **Lisp dialect**
+;; * **Very simple syntax**
+;; * **Functional**
+;; * **Dynamic**
+;;     - A Clojure program is not just something you compile and run, but something with which you can interact.
+;; * **Dynamically typed language**
+;;     - If that's not ideal for you, there is a library that provides optional typing, similar to what TypeScript is to JavaScript.
+;; * **Homoiconic**
 ;;     - Clojure programs are represented by Clojure data structures.
-;; * Immutability
-;; * Great with concurrency and data processing/manipulation
-;; * Very simple syntax
-;; * Live programming through the REPL
-;; * Runs on the JVM
+;; * **Immutability**
+;; * **Great with concurrency and data processing/manipulation**
+;; * **Live programming through the REPL**
+;; * **Runs on the JVM**
 ;;     - Compiles to a .jar file, so anyone with Java installed can run it.
-;; * Can compile to Javascript
-;;     - Makes frontend development with Clojure easier through React wrappers, for example.
+;; * **Designed to be hosted**
+;;     - Has implementations for the JVM, .Net, JavaScript and more.
 
 ;; ---
 ;; # Who uses Clojure?
-;; ### Walmart
-;; - Used Clojure to create a robust data management system that supports over 5,000 stores and integrates online and mobile data.
+;; ### Penpot
+;; - An open source Figma alternative.
 ;; ### Atlassian
 ;; - Is using Clojure to build realtime collaboration features into both new and existing products.
 ;; ### Nubank
 ;; - Has around 1000 microservices written in Clojure.
+;; ### Jepsen
+;; - A testing framework for distributed systems.
+;; ### Datomic
+;; - A database where data is immutable as a whole.
 ;; ### Me
 ;; - Used it to create this slideshow :-)
 
 
 ;; ---
 ;; # The REPL
-;; The REPL (Read-Eval Print Loop) is a programming environment which enables the programmer to interact with a running
-;; Clojure program and modify it, evaluating one code expression at a time.\
+;; When using most programming languages, we go through a cycle of writing, compiling and testing. Compiling can
+;; sometimes take a while, making the process slow.\
 ;; \
-;; This enables a quick feedback loop not available in most other languages.\
+;; In Clojure, the usual programming workflow involves developing the app while it's running.\
+;; \
+;; The REPL (Read-Eval Print Loop) is a programming environment which enables the programmer to interact with a running
+;; Clojure program.\
+;; \
+;; This enables a quick feedback loop not available in most other languages. It allows us to run arbitrary code within
+;; the application, read it's state and update code. All of this while the application is running.\
 ;; \
 ;; We can think of the REPL as something similar to SSH, in the same way you can interact with a remote server, we can use the REPL to
 ;; interact with a running Clojure process.
 {::clerk/visibility {:code :hide :result :show}}
-(clerk/html [:img {:src "https://clojure.org/images/content/guides/repl/show-terminal-repl.gif"}])
+(clerk/html [:img {:src "https://clojure.org/images/content/guides/repl/cursive-repl-demo.gif"}])
 
 ;; ---
 ;; # Syntax
 ;; The syntax consists of:
 ;; #### Numeric types
-{::clerk/visibility {:code :show :result :hide}}
-#{
-	985 			; Integer
-	3.14			; Floating Point
-	1/3				; Ratio
-}
+^{::clerk/visibility {:code :hide :result :show}}
+(clerk/code
+ "985 			; Integer
+3.14			; Floating Point
+1/3				; Ratio" )
 ;; #### Character types
-#{
-	"Hello World!"	; String
-	\e				; Character
-	#"[0-9]+" 		; Regular expression
-}
+^{::clerk/visibility {:code :hide :result :show}}
+(clerk/code
+ "\"Hello World!\"	; String
+\\e				; Character
+#\"[0-9]+\" 		; Regular expression")
 ;; #### Symbols and idents
-#{
-	map				; Symbol
-	nil 			; Null value
-	[true false] 	; Booleans
-	:hello			; Keyword
-	:some/thing		; Keyword with namespace
-}
+^{::clerk/visibility {:code :hide :result :show}}
+(clerk/code "map				; Symbol
+nil 			; Null value
+true false 		; Booleans
+:hello			; Keyword
+:some/thing		; Keyword with namespace")
 ;; #### Literal collections
-#{
-	'(1 2 "Three")			; List
-	[1 :two "Three"]		; Vector
-	{:key1 "val1" :key2 2}	; Map
-	#{:one 2 "Three" 4.5}	; Set
-}
-
+^{::clerk/visibility {:code :hide :result :show}}
+(clerk/code
+ "'(1 2 \"Three\")			; List (sequential access)
+[1 :two \"Three\"]		; Vector (random access)
+{:key1 \"val1\" :key2 2}	; Map
+#{:one 2 \"Three\" 4.5}	; Set"
+)
 ;; ---
 ;; # Evaluation
 ;; Clojure reads and evaluates expressions differently.\
@@ -118,69 +129,39 @@
 '(+ 1 2 3)
 
 ;; ---
-;; # Lists
-;; Create a list:
-{::clerk/visibility {:result :hide}}
-'(1 2 3 4 5)
-(list 1 2 3 4 5)
-{::clerk/visibility {:result :show}}
-;; Get nth element of a list:
-(nth (list 1 2 3 4 5) 3)
-;; Get size of a list:
-(count (list 1 2 3 4 5))
-;; Add element to the **start** of a list
-(conj (list "One" "Two" "Three" ) 0)
-;; Lists are accessed sequentially, that's why _conj_ adds an element to the start
-
-;; ---
-;; # Vectors
-;; Create a vector:
-{::clerk/visibility {:result :hide}}
-[1 2 3 4 5]
-(vector 1 2 3 4 5)
-;; Get nth element of a vector:
-{::clerk/visibility {:result :show}}
-(get [1 2 3 4] 2)
-;; Get size of a vector:
-(count [1 2 3 4 5])
-;; Add element to the **end** of a vector
-(conj [1 2 3 4] "Five")
-;; Vectors are accessed randomly, so adding something to the end has a complexity of O(1), same about getting the nth element of one.
-
-;; ---
-;; # Hash Sets
-;; Create a set:
-{::clerk/visibility {:result :hide}}
-#{1 2 "Three" nil :five}
-;; Check if a set contains a value;
-{::clerk/visibility {:result :show}}
-[(contains? #{1 2 3} 3) (contains? #{1 2 3} 4)]
-;; Add an element to the set:
-(conj #{1 2 3 4} 5)
-;; Sets are collections of unique values so you can't add something twice
-(conj #{1 2 3 4} 2)
-;; Get an element from a set:
-(get #{#{3 2 1} #{:one :two}} #{1 3 2})
-
-;; ---
-;; # Maps
-;; Create a map:
-{::clerk/visibility {:result :hide}}
-{:key1 1
- :key2 "Two"
- 1 2
- }
-;; Get element from a map
-{::clerk/visibility {:result :show}}
-(:key1 {:key1 1 :key2 "Two" 1 2}) ; If we are using a key
-(get {:key1 1 :key2 "Two" 1 2} 1) ; If we are not using a key
-;; Get element with default value
-(:key3 {:key1 1 :key2 "Two" 1 2} "Value not found") ; If we are using a key
-(get {:key1 1 :key2 "Two" 1 2} 2 "Value not found") ; If we are not using a key
+;; # Data Structures
+;; #### Creation
+{::clerk/visibility {:code :hide :result :show}}
+(clerk/code
+"'(1 2 3 4) (list 1 2 3 4)	; Create a list
+[1 2 3 4] (vector [1 2 3 4]	; Create a vector
+{:key1 \"val\" :key2 :val} 	; Create a map
+#{:val1 2 3 \"four\"} 		; Create a hash set")
+;; #### Access
+(clerk/code
+"(nth '(1 2 3) 2) 	 		; => 3
+(get [1 2 3] 1)  			; => 2
+(get {:val1 1 2 \"two\"} 2) 	; => \"two\"
+; We can call keywords to get the value from a map:
+(:val1 {:val1 1 2 \"two\"})	; => 1
+(get #{1 2 :3 \"four\"} \":3\")	; => :3")
+;; #### Size
+(clerk/code
+"(count '(1 2 3 4)) 			; => 4
+(count [1 2 3 4]) 			; => 4
+(count {:k1 :v1 :k2 :v2}) 	; => 2
+(count #{1 2 3 4}) 			; => 4")
+; #### Adding values
+(clerk/code
+"(conj '(1 2 3 4) 0) 	; => (0 1 2 3 4)
+(conj [1 2 3 4] 5) 		; => [1 2 3 4 5]
+(assoc {:k1 1} :k2 2) 	; => {:k1 1 :k2 2}
+(conj #{1 2 3 4} 5) 	; => {1 4 3 2 5}")
 
 ;; ---
 ;; # Boolean Expressions
 ;; #### Equality
+{::clerk/visibility {:code :show}}
 (= #{1 2 3} #{3 2 1})
 (= true false)
 ;; #### Or
@@ -229,22 +210,44 @@
 ;; # Immutability
 ;; In Clojure, data structures are immutable
 {::clerk/visibility {:result :hide}}
-(def my-list (list 1 2 3 4))
+(def email-vector (vector "johndoe@gmail.com" "john@doe"))
 {::clerk/visibility {:result :show}}
-(conj my-list 3)
-my-list
-;; Any function that "changes" the data structure returns a new instance of it.\
-;; We could get around this by redefining _my-list_:
+(conj email-vector "some@email.com")
+email-vector
+;; Even nested data structures stay immutable
 {::clerk/visibility {:result :hide}}
-(def my-list (list 1 2 3 4))
-(def my-list (conj my-list 2))
+(def person {:name "John Doe"
+			 :addresses ["308 Negra Arroyo Lane, Albuquerque" "62 West Wallaby Street, Wigan"]
+			 :contact {:phone-numbers ["12345678"] :emails email-vector}})
 {::clerk/visibility {:result :show}}
-my-list
+(update-in person [:addresses 0] str " New Mexico") ; _update-in_ lets us access nested data structures by providing a series of keys
+(update-in person [:contact :emails 1] str ".com")
+person
+
+;; ---
+;; # Mutability
+;; If mutability is needed we can use _atom_ to define mutable variables:\
+;; Create an atom to hold a counter
+{::clerk/visibility {:code :hide :result :show}}
+(clerk/code
+	"(def counter (atom 0))
+@counter ; Check the value of the atom")
+0
+;; Update the value using _swap!_ passing the _inc_ function to increment it by 1
+(clerk/code
+	"(swap! counter inc)
+@counter")
+1
+;; Reset the atom to a specific value
+(clerk/code
+	"(reset! counter 42)
+@counter")
+42
 
 ;; ---
 ;; # Functions
 ;; We can create a function with _defn_
-{::clerk/visibility {:result :hide}}
+{::clerk/visibility {:code :show :result :hide}}
 (defn my-clojure-function "Optional docstring" [arg1 arg2]
 	(str arg1 arg2))
 {::clerk/visibility {:result :show}}
@@ -361,11 +364,11 @@ my-list
 ;; We saw that clojure is homoiconic, so expressions are written things in terms of lists.
 ;; This means we are able to manupulate those lists, after all, they are just another data structure.\
 ;; So I could make a function that receives an operation in infix notation and turns it into the correct form:
-{::clerk/visibility {:result :hide}}
+{::clerk/visibility {:code :show :result :hide}}
 (defn infix-1 [[operand1 operator operand2]]
 	(list operator operand1 operand2)
 	)
-{::clerk/visibility {:result :show}}
+{::clerk/visibility {:code :show :result :show}}
 (infix-1 '(2 + 4))
 ;; And then evaluate it:
 (eval (infix-1 '(2 + 4)))
@@ -374,15 +377,28 @@ my-list
 {::clerk/visibility {:result :hide}}
 (defmacro infix [[operand1 operator operand2]]
 	(list operator operand1 operand2))
-{::clerk/visibility {:result :show}}
-;; ```
-;; (infix (4 + 2))
-;; => 6
-;; ```
+{::clerk/visibility {:code :hide :result :show}}
+(clerk/code
+ '(infix (4 + 2))
+	)
+{::clerk/visibility {:code :hide :result :show}}
+2
 ;; Macros allow us to extend the language itself by writing code that generates other code at compile time.\
 ;; We can use _macroexpand_ to see how the code would look like when expanded by the compiler.
+{::clerk/visibility {:code :show :result :show}}
 (macroexpand '(when true "Hello"))
 ;; We can see that _when_ is actually just a macro, that joins if and do.
+
+;; ---
+;; # Macros
+;; Creating macros in Clojure is a lot easier than in other languages because of how simple the syntax is. All we have
+;; to do is manipulate data structures.\
+;; Clojure's simplicity not only allows for easier macros, it also lets us add complicated features that would be impossible
+;; to implement in other languages without updating the compiler.\
+;; Some features implemented with macros:
+;; - core.match: Implements pattern matching.
+;; - core.async: Implements async programming like in Go.
+;; - core.login: A logic programming library.
 
 ;; ---
 ;; # Thank You!
